@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        background: #f8f8f8;
+        padding: 60px 0;
+    }
+    
+    #login-form > div {
+        margin: 15px 0;
+    }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+	<div class="container py-5 h-100">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12 col-md-8 col-lg-6 col-xl-5">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="mb-5">{{.title}}</h3>
+					</div>
+					{{if .member}}
+					<div>
+						<p>{{.member.Username}} 님 환영 합니다!</p>
+					</div>
+					{{else}}
+					<div class="panel-body">
+						<form class="form" id="login-form" action="/register" method="POST">
+							<div class="form-group mb-4">
+								<input type="text" class="form-control form-control-lg" id="id" name="id" placeholder="아이디" autofocus>
+							</div>
+							<div class="form-group mb-4">
+								<input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="비밀번호">
+							</div>
+                            <div class="form-group mb-4">
+								<input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="이름">
+							</div>
+                            <div class="form-group mb-4">
+								<input type="tel" class="form-control form-control-lg" id="tel" name="tel" placeholder="전화번호" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
+							</div>
+							<div>
+								<button class="btn btn-primary btn-lg btn-block mb-4" type="submit">회원가입</button>
+							</div>
+						</form>
+					</div>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
