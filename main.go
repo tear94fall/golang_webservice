@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"main/database"
 	"main/member"
 	"main/render"
 
@@ -8,12 +10,20 @@ import (
 )
 
 func main() {
-	r := SetupRouter()
+	db, err := database.NewDBHandler()
+	if err != nil {
+		fmt.Println("DB init fail")
+		return
+	}
+
+	r := SetupRouter(db)
 	r.Run()
 }
 
-func SetupRouter() *gin.Engine {
+func SetupRouter(db_handler *database.DBHandler) *gin.Engine {
 	r := gin.Default()
+	r.Use(MysqlContext(db_handler))
+
 	r.LoadHTMLGlob("templates/*")
 
 	r.GET("/", render.IndexPage)
@@ -25,4 +35,15 @@ func SetupRouter() *gin.Engine {
 	r.POST("/register", member.Register)
 
 	return r
+}
+
+func MysqlContext(handler *database.DBHandler) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if handler == nil {
+			panic("init mysql database conn fail")
+		}
+
+		c.Set("mysql", handler)
+		c.Next()
+	}
 }
