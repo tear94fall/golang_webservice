@@ -2,7 +2,9 @@ package member
 
 import (
 	"errors"
+	"main/database"
 	"main/render"
+	"main/util"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,10 +23,22 @@ func Register(c *gin.Context) {
 	name := c.PostForm("name")
 	tel := c.PostForm("tel")
 
-	register := &RegisterInfo{id, password, name, tel}
+	EncPassword, _ := util.EncStr(password)
+
+	register := &RegisterInfo{id, EncPassword, name, tel}
 
 	err := CheckRegisterMember(register)
 	if err != nil {
+		render.ErrorPage(c, "회원가입 실패", err)
+		return
+	}
+
+	member := NewMember(register)
+
+	db, _ := c.MustGet("mysql").(*database.DBHandler)
+	database.CreateMember(db.DBConn, member)
+
+	if id != member.UserId {
 		render.ErrorPage(c, "회원가입 실패", err)
 		return
 	}
@@ -49,4 +63,14 @@ func CheckRegisterMember(member *RegisterInfo) error {
 	}
 
 	return err
+}
+
+func NewMember(register *RegisterInfo) *database.Member {
+	member := &database.Member{}
+	member.UserId = register.Id
+	member.Password = register.Password
+	member.Name = register.Name
+	member.Tel = register.Tel
+
+	return member
 }
