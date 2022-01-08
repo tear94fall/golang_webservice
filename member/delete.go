@@ -10,29 +10,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type LoginInfo struct {
+type DeleteInfo struct {
 	Id       string
 	Password string
 }
 
-func Login(c *gin.Context) {
+func Delete(c *gin.Context) {
 	id := c.PostForm("id")
 	password := c.PostForm("password")
 
 	EncPassword, _ := util.EncStr(password)
 
-	login := &LoginInfo{id, password}
+	delete := &DeleteInfo{id, password}
 
-	err := CheckLoginMember(login)
+	err := CheckDeleteMember(delete)
 	if err != nil {
-		render.ErrorPage(c, "로그인 실패", err)
+		render.ErrorPage(c, "회원탈퇴 실패", err)
 		return
 	}
 
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	member := &database.Member{}
 	if err2 := database.GetMemberByUserId(db.DBConn, member, id); err2 != nil {
-		render.ErrorPage(c, "로그인 실패", err)
+		render.ErrorPage(c, "회원탈퇴 실패", err)
 		return
 	}
 
@@ -41,13 +41,18 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	if err3 := database.DeleteMember(db.DBConn, member, id); err3 != nil {
+		render.ErrorPage(c, "회원탈퇴 실패", err)
+		return
+	}
+
 	c.HTML(http.StatusOK, render.IndexHtml, gin.H{
-		"title":  "로그인 성공",
-		"member": login,
+		"title":   "회원 탈퇴 성공",
+		"user_id": id,
 	})
 }
 
-func CheckLoginMember(member *LoginInfo) error {
+func CheckDeleteMember(member *DeleteInfo) error {
 	var err error
 
 	if len(member.Id) == 0 {

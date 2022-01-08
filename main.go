@@ -4,25 +4,27 @@ import (
 	"fmt"
 	"main/database"
 	"main/member"
+	"main/post"
 	"main/render"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	db, err := database.NewDBHandler()
-	if err != nil {
-		fmt.Println("DB init fail")
-		return
-	}
-
-	r := SetupRouter(db)
+	r := SetupRouter()
 	r.Run()
 }
 
-func SetupRouter(db_handler *database.DBHandler) *gin.Engine {
+func SetupRouter() *gin.Engine {
 	r := gin.Default()
-	r.Use(MysqlContext(db_handler))
+
+	mysql, err := database.NewDBHandler()
+	if err != nil {
+		fmt.Println("DB init fail")
+		panic("mysql init fail")
+	}
+
+	r.Use(MysqlContext(mysql))
 
 	r.LoadHTMLGlob("templates/*")
 
@@ -31,8 +33,20 @@ func SetupRouter(db_handler *database.DBHandler) *gin.Engine {
 	r.GET("/register", render.RegisterPage)
 	r.GET("/board", render.BoardPage)
 
+	postGroup := r.Group("/member")
+	{
+		// page render
+		postGroup.GET("/register", render.PostRegisterPage)
+		postGroup.GET("/list", render.PostListPage)
+		postGroup.GET("/delete", render.PostDeletePage)
+
+		// business logic
+		postGroup.POST("/register", post.Register)
+	}
+
 	r.POST("/login", member.Login)
 	r.POST("/register", member.Register)
+	r.POST("/delete", member.Delete)
 
 	return r
 }

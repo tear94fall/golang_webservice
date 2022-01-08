@@ -30,6 +30,24 @@ func BoardPage(c *gin.Context) {
 	})
 }
 
+func PostListPage(c *gin.Context) {
+	c.HTML(http.StatusOK, PostListHtml, gin.H{
+		"title": "게시글 목록",
+	})
+}
+
+func PostRegisterPage(c *gin.Context) {
+	c.HTML(http.StatusOK, PostRegisterHtml, gin.H{
+		"title": "게시글 등록 하기",
+	})
+}
+
+func PostDeletePage(c *gin.Context) {
+	c.HTML(http.StatusOK, PostDeleteHtml, gin.H{
+		"title": "게시글 삭제 하기",
+	})
+}
+
 func ErrorPage(c *gin.Context, titile string, err error) {
 	c.HTML(http.StatusOK, NotFoundHtml, gin.H{
 		"title":   titile,

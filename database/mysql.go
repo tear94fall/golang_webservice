@@ -42,6 +42,7 @@ func NewDBHandler() (*DBHandler, error) {
 	connPool.SetConnMaxLifetime(time.Hour)
 
 	db.AutoMigrate(&Member{})
+	db.AutoMigrate(&Post{})
 
 	db_handler.DBConn = db
 
