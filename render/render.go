@@ -12,14 +12,14 @@ func IndexPage(c *gin.Context) {
 	})
 }
 
-func LoginPage(c *gin.Context) {
-	c.HTML(http.StatusOK, LoginHtml, gin.H{
+func MemberLoginPage(c *gin.Context) {
+	c.HTML(http.StatusOK, MemberLoginHtml, gin.H{
 		"title": "로그인 하기",
 	})
 }
 
-func RegisterPage(c *gin.Context) {
-	c.HTML(http.StatusOK, RegisterHtml, gin.H{
+func MemberRegisterPage(c *gin.Context) {
+	c.HTML(http.StatusOK, MemberRegisterHtml, gin.H{
 		"title": "회원 가입 하기",
 	})
 }
@@ -27,6 +27,24 @@ func RegisterPage(c *gin.Context) {
 func BoardPage(c *gin.Context) {
 	c.HTML(http.StatusOK, BoardHtml, gin.H{
 		"title": "회원 가입 하기",
+	})
+}
+
+func PostListPage(c *gin.Context) {
+	c.HTML(http.StatusOK, PostListHtml, gin.H{
+		"title": "게시글 목록",
+	})
+}
+
+func PostRegisterPage(c *gin.Context) {
+	c.HTML(http.StatusOK, PostRegisterHtml, gin.H{
+		"title": "게시글 등록 하기",
+	})
+}
+
+func PostDeletePage(c *gin.Context) {
+	c.HTML(http.StatusOK, PostDeleteHtml, gin.H{
+		"title": "게시글 삭제 하기",
 	})
 }
 

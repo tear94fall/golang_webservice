@@ -1,3 +1,4 @@
+{{ define "member/register.html" }}
 <!DOCTYPE html>
 <html lang="ko"><head>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -31,7 +32,7 @@
 					</div>
 					{{else}}
 					<div class="panel-body">
-						<form class="form" id="login-form" action="/register" method="POST">
+						<form class="form" id="login-form" action="register" method="POST">
 							<div class="form-group mb-4">
 								<input type="text" class="form-control form-control-lg" id="id" name="id" placeholder="아이디" autofocus>
 							</div>
@@ -57,3 +58,4 @@
 </div>
 </body>
 </html>
+{{ end }}

@@ -4,35 +4,65 @@ import (
 	"fmt"
 	"main/database"
 	"main/member"
+	"main/post"
 	"main/render"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	db, err := database.NewDBHandler()
-	if err != nil {
-		fmt.Println("DB init fail")
-		return
-	}
-
-	r := SetupRouter(db)
+	r := SetupRouter()
 	r.Run()
 }
 
-func SetupRouter(db_handler *database.DBHandler) *gin.Engine {
+func SetupRouter() *gin.Engine {
 	r := gin.Default()
-	r.Use(MysqlContext(db_handler))
 
-	r.LoadHTMLGlob("templates/*")
+	mysql, err := database.NewDBHandler()
+	if err != nil {
+		fmt.Println("DB init fail")
+		panic("mysql init fail")
+	}
+
+	r.Use(MysqlContext(mysql))
+
+	r.LoadHTMLGlob("templates/**/*")
 
 	r.GET("/", render.IndexPage)
-	r.GET("/login", render.LoginPage)
-	r.GET("/register", render.RegisterPage)
-	r.GET("/board", render.BoardPage)
 
-	r.POST("/login", member.Login)
-	r.POST("/register", member.Register)
+	// member
+	memberGroup := r.Group("/member")
+	{
+		// page render
+		memberGroup.GET("/login", render.MemberLoginPage)
+		memberGroup.GET("/register", render.MemberRegisterPage)
+
+		// business logic
+		memberGroup.POST("/login", member.Login)
+		memberGroup.POST("/register", member.Register)
+		memberGroup.POST("/delete", member.Delete)
+	}
+
+	// board
+	boardGroup := r.Group("/board")
+	{
+		// page render
+		boardGroup.GET("/board", render.BoardPage)
+
+		// business logic
+	}
+
+	// post
+	postGroup := r.Group("/post")
+	{
+		// page render
+		postGroup.GET("/register", render.PostRegisterPage)
+		postGroup.GET("/list", render.PostListPage)
+		postGroup.GET("/delete", render.PostDeletePage)
+
+		// business logic
+		postGroup.POST("/register", post.Register)
+	}
 
 	return r
 }
