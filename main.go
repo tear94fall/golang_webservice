@@ -26,14 +26,34 @@ func SetupRouter() *gin.Engine {
 
 	r.Use(MysqlContext(mysql))
 
-	r.LoadHTMLGlob("templates/*")
+	r.LoadHTMLGlob("templates/**/*")
 
 	r.GET("/", render.IndexPage)
-	r.GET("/login", render.LoginPage)
-	r.GET("/register", render.RegisterPage)
-	r.GET("/board", render.BoardPage)
 
-	postGroup := r.Group("/member")
+	// member
+	memberGroup := r.Group("/member")
+	{
+		// page render
+		memberGroup.GET("/login", render.MemberLoginPage)
+		memberGroup.GET("/register", render.MemberRegisterPage)
+
+		// business logic
+		memberGroup.POST("/login", member.Login)
+		memberGroup.POST("/register", member.Register)
+		memberGroup.POST("/delete", member.Delete)
+	}
+
+	// board
+	boardGroup := r.Group("/board")
+	{
+		// page render
+		boardGroup.GET("/board", render.BoardPage)
+
+		// business logic
+	}
+
+	// post
+	postGroup := r.Group("/post")
 	{
 		// page render
 		postGroup.GET("/register", render.PostRegisterPage)
@@ -43,10 +63,6 @@ func SetupRouter() *gin.Engine {
 		// business logic
 		postGroup.POST("/register", post.Register)
 	}
-
-	r.POST("/login", member.Login)
-	r.POST("/register", member.Register)
-	r.POST("/delete", member.Delete)
 
 	return r
 }
