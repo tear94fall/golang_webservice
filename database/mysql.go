@@ -12,7 +12,7 @@ const (
 	USERNAME = "root"
 	PASSWORD = "root1234"
 	DATABASE = "my_db"
-	HOST     = "127.0.0.1"
+	HOST     = "docker.for.mac.localhost"
 	PORT     = "3306"
 )
 
