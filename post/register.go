@@ -2,8 +2,8 @@ package post
 
 import (
 	"errors"
+	"main/common"
 	"main/database"
-	"main/render"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,7 @@ func Register(c *gin.Context) {
 
 	err := CheckRegisterPost(register)
 	if err != nil {
-		render.ErrorPage(c, "회원가입 실패", err)
+		common.ErrorPage(c, "회원가입 실패", err)
 		return
 	}
 
@@ -33,7 +33,7 @@ func Register(c *gin.Context) {
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	database.CreatePost(db.DBConn, post)
 
-	c.HTML(http.StatusOK, render.IndexHtml, gin.H{
+	c.HTML(http.StatusOK, common.IndexHtml, gin.H{
 		"title":  "게시글 등록 성공",
 		"member": register,
 	})

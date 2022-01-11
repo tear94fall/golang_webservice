@@ -2,8 +2,8 @@ package member
 
 import (
 	"errors"
+	"main/common"
 	"main/database"
-	"main/render"
 	"main/util"
 	"net/http"
 
@@ -25,28 +25,28 @@ func Delete(c *gin.Context) {
 
 	err := CheckDeleteMember(delete)
 	if err != nil {
-		render.ErrorPage(c, "회원탈퇴 실패", err)
+		common.ErrorPage(c, "회원탈퇴 실패", err)
 		return
 	}
 
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	member := &database.Member{}
 	if err2 := database.GetMemberByUserId(db.DBConn, member, id); err2 != nil {
-		render.ErrorPage(c, "회원탈퇴 실패", err)
+		common.ErrorPage(c, "회원탈퇴 실패", err)
 		return
 	}
 
 	if EncPassword != member.Password {
-		render.ErrorPage(c, "가입되지 않은 사용자 입니다.", errors.New("invalid user id"))
+		common.ErrorPage(c, "가입되지 않은 사용자 입니다.", errors.New("invalid user id"))
 		return
 	}
 
 	if err3 := database.DeleteMember(db.DBConn, member, id); err3 != nil {
-		render.ErrorPage(c, "회원탈퇴 실패", err)
+		common.ErrorPage(c, "회원탈퇴 실패", err)
 		return
 	}
 
-	c.HTML(http.StatusOK, render.IndexHtml, gin.H{
+	c.HTML(http.StatusOK, common.IndexHtml, gin.H{
 		"title":   "회원 탈퇴 성공",
 		"user_id": id,
 	})
