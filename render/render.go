@@ -27,7 +27,7 @@ func MemberRegisterPage(c *gin.Context) {
 }
 
 func PostListPage(c *gin.Context) {
-	list := post.List()
+	list := post.List(c)
 	c.HTML(http.StatusOK, common.PostListHtml, gin.H{
 		"title": "게시글 목록",
 		"posts": list,
