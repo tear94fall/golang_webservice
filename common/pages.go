@@ -11,7 +11,7 @@ const (
 	// post
 	PostRegisterHtml string = "post/register.html"
 	PostListHtml     string = "post/list.html"
-	PostDeleteHtml   string = "post/delete.html"
+	PostArticlePage  string = "post/article.html"
 
 	// common
 	NotFoundHtml string = "common/404.html"

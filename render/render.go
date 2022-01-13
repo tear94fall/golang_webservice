@@ -40,8 +40,12 @@ func PostRegisterPage(c *gin.Context) {
 	})
 }
 
-func PostDeletePage(c *gin.Context) {
-	c.HTML(http.StatusOK, common.PostDeleteHtml, gin.H{
-		"title": "게시글 삭제 하기",
+func PostArticlePage(c *gin.Context) {
+	id := c.Param("id")
+	article := post.GetArticle(c, id)
+
+	c.HTML(http.StatusOK, common.PostArticlePage, gin.H{
+		"title":   "게시글 보기",
+		"article": article,
 	})
 }
