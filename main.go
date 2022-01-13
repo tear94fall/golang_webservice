@@ -43,25 +43,17 @@ func SetupRouter() *gin.Engine {
 		memberGroup.POST("/delete", member.Delete)
 	}
 
-	// board
-	boardGroup := r.Group("/board")
-	{
-		// page render
-		boardGroup.GET("/board", render.BoardPage)
-
-		// business logic
-	}
-
 	// post
 	postGroup := r.Group("/post")
 	{
 		// page render
 		postGroup.GET("/register", render.PostRegisterPage)
 		postGroup.GET("/list", render.PostListPage)
-		postGroup.GET("/delete", render.PostDeletePage)
+		postGroup.GET("/article/:id", render.PostArticlePage)
 
 		// business logic
 		postGroup.POST("/register", post.Register)
+		postGroup.POST("/modify", post.Modify)
 	}
 
 	return r

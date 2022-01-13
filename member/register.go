@@ -2,8 +2,8 @@ package member
 
 import (
 	"errors"
+	"main/common"
 	"main/database"
-	"main/render"
 	"main/util"
 	"net/http"
 
@@ -29,7 +29,7 @@ func Register(c *gin.Context) {
 
 	err := CheckRegisterMember(register)
 	if err != nil {
-		render.ErrorPage(c, "회원가입 실패", err)
+		common.ErrorPage(c, "회원가입 실패", err)
 		return
 	}
 
@@ -39,11 +39,11 @@ func Register(c *gin.Context) {
 	database.CreateMember(db.DBConn, member)
 
 	if id != member.UserId {
-		render.ErrorPage(c, "회원가입 실패", err)
+		common.ErrorPage(c, "회원가입 실패", err)
 		return
 	}
 
-	c.HTML(http.StatusOK, render.IndexHtml, gin.H{
+	c.HTML(http.StatusOK, common.IndexHtml, gin.H{
 		"title":  "회원가입 성공",
 		"member": register,
 	})

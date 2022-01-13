@@ -1,8 +1,6 @@
 package database
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -12,8 +10,8 @@ type Post struct {
 	Title        string
 	Content      string
 	Writer       string
-	RegisterDate time.Time
-	ModifiedDate time.Time
+	RegisterDate string
+	ModifiedDate string
 }
 
 func CreatePost(conn *gorm.DB, post *Post) error {
@@ -25,7 +23,7 @@ func CreatePost(conn *gorm.DB, post *Post) error {
 	return nil
 }
 
-func GetPosts(conn *gorm.DB, post *Post) error {
+func GetPosts(conn *gorm.DB, post *[]Post) error {
 	err := conn.Find(post).Error
 	if err != nil {
 		return err
