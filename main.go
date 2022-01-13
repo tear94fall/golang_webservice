@@ -53,6 +53,7 @@ func SetupRouter() *gin.Engine {
 
 		// business logic
 		postGroup.POST("/register", post.Register)
+		postGroup.POST("/modify", post.Modify)
 	}
 
 	return r

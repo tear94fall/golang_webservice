@@ -32,7 +32,8 @@
 					</div>
 					{{else}}
 					<div class="panel-body">
-						<form class="form" id="login-form" action="modified" method="POST">
+						<form class="form" id="login-form" action="../modify" method="POST">
+                            <input type="hidden" id="article-id" name="article-id" value="{{ .article.Id }}">
 							<div class="form-group mb-4">
 								<input type="text" class="form-control form-control-lg" id="title" name="title" value="{{ .article.Title }}" autofocus>
 							</div>
