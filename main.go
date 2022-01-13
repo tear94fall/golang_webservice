@@ -49,7 +49,7 @@ func SetupRouter() *gin.Engine {
 		// page render
 		postGroup.GET("/register", render.PostRegisterPage)
 		postGroup.GET("/list", render.PostListPage)
-		postGroup.GET("/delete", render.PostDeletePage)
+		postGroup.GET("/article/:id", render.PostArticlePage)
 
 		// business logic
 		postGroup.POST("/register", post.Register)
