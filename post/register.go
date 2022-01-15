@@ -62,6 +62,7 @@ func NewPost(register *PostInfo) *database.Post {
 	post.Writer = register.Writer
 	post.RegisterDate = time.Now().Format("2006-01-02")
 	post.ModifiedDate = time.Now().Format("2006-01-02")
+	post.Views = 0
 
 	return post
 }
