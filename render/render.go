@@ -9,43 +9,58 @@ import (
 )
 
 func IndexPage(c *gin.Context) {
-	c.HTML(http.StatusOK, common.IndexHtml, gin.H{
+	Render(c, gin.H{
 		"title": "Go와 Docker를 이용한 웹 서비스",
-	})
+	}, common.IndexHtml)
 }
 
 func MemberLoginPage(c *gin.Context) {
-	c.HTML(http.StatusOK, common.MemberLoginHtml, gin.H{
+	Render(c, gin.H{
 		"title": "로그인 하기",
-	})
+	}, common.MemberLoginHtml)
 }
 
 func MemberRegisterPage(c *gin.Context) {
-	c.HTML(http.StatusOK, common.MemberRegisterHtml, gin.H{
+	Render(c, gin.H{
 		"title": "회원 가입 하기",
-	})
+	}, common.MemberRegisterHtml)
 }
 
 func PostListPage(c *gin.Context) {
 	list := post.List(c)
-	c.HTML(http.StatusOK, common.PostListHtml, gin.H{
+
+	Render(c, gin.H{
 		"title": "게시글 목록",
 		"posts": list,
-	})
+	}, common.PostListHtml)
 }
 
 func PostRegisterPage(c *gin.Context) {
-	c.HTML(http.StatusOK, common.PostRegisterHtml, gin.H{
+	Render(c, gin.H{
 		"title": "게시글 등록 하기",
-	})
+	}, common.PostRegisterHtml)
 }
 
 func PostArticlePage(c *gin.Context) {
 	id := c.Param("id")
 	article := post.GetArticle(c, id)
 
-	c.HTML(http.StatusOK, common.PostArticlePage, gin.H{
+	Render(c, gin.H{
 		"title":   "게시글 보기",
 		"article": article,
-	})
+	}, common.PostArticlePage)
+}
+
+func Render(c *gin.Context, data gin.H, PageHtml string) {
+	login, _ := c.Get("logon")
+	data["login"] = login.(bool)
+
+	switch c.Request.Header.Get("Accept") {
+	case "application/json":
+		c.JSON(http.StatusOK, data)
+	case "application/xml":
+		c.XML(http.StatusOK, data)
+	default:
+		c.HTML(http.StatusOK, PageHtml, data)
+	}
 }

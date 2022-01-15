@@ -12,6 +12,7 @@ type Post struct {
 	Writer       string
 	RegisterDate string
 	ModifiedDate string
+	Views        int
 }
 
 func CreatePost(conn *gorm.DB, post *Post) error {

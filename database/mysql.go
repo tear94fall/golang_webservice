@@ -43,6 +43,7 @@ func NewDBHandler() (*DBHandler, error) {
 
 	db.AutoMigrate(&Member{})
 	db.AutoMigrate(&Post{})
+	db.AutoMigrate(&Token{})
 
 	db_handler.DBConn = db
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"main/auth"
 	"main/database"
 	"main/member"
 	"main/post"
@@ -25,6 +26,7 @@ func SetupRouter() *gin.Engine {
 	}
 
 	r.Use(MysqlContext(mysql))
+	r.Use(AuthContext())
 
 	r.LoadHTMLGlob("templates/**/*")
 
@@ -36,6 +38,7 @@ func SetupRouter() *gin.Engine {
 		// page render
 		memberGroup.GET("/login", render.MemberLoginPage)
 		memberGroup.GET("/register", render.MemberRegisterPage)
+		memberGroup.GET("/logout", member.Logout)
 
 		// business logic
 		memberGroup.POST("/login", member.Login)
@@ -67,5 +70,19 @@ func MysqlContext(handler *database.DBHandler) gin.HandlerFunc {
 
 		c.Set("mysql", handler)
 		c.Next()
+	}
+}
+
+func AuthContext() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if token, err := c.Cookie("login_token"); err == nil || token != "" {
+			if auth.CheckLoginToken(c, token) != nil {
+				c.Set("logon", false)
+			} else {
+				c.Set("logon", true)
+			}
+		} else {
+			c.Set("logon", false)
+		}
 	}
 }
