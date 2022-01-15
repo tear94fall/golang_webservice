@@ -2,10 +2,11 @@ package member
 
 import (
 	"errors"
+	"main/auth"
 	"main/common"
 	"main/database"
+	"main/render"
 	"main/util"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,10 +44,16 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, common.IndexHtml, gin.H{
+	token := auth.GenToken(member)
+	c.SetCookie("login_token", token, 3600, "", "", false, true)
+	c.Set("login", true)
+
+	database.CreateToken(db.DBConn, token)
+
+	render.Render(c, gin.H{
 		"title":  "회원가입 성공",
 		"member": register,
-	})
+	}, common.IndexHtml)
 }
 
 func CheckRegisterMember(member *RegisterInfo) error {
