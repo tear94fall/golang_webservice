@@ -5,7 +5,6 @@ import (
 	"main/auth"
 	"main/common"
 	"main/database"
-	"main/render"
 	"main/util"
 
 	"github.com/gin-gonic/gin"
@@ -48,9 +47,9 @@ func Register(c *gin.Context) {
 	c.SetCookie("login_token", token, 3600, "", "", false, true)
 	c.Set("login", true)
 
-	database.CreateToken(db.DBConn, token)
+	database.CreateToken(db.DBConn, token, member.UserId)
 
-	render.Render(c, gin.H{
+	common.Render(c, gin.H{
 		"title":  "회원가입 성공",
 		"member": register,
 	}, common.IndexHtml)

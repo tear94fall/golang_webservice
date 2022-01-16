@@ -6,16 +6,26 @@ import (
 
 type Token struct {
 	gorm.Model
-	Id    int
-	Login string
+	Id     int
+	Login  string
+	UserId string
 }
 
-func CreateToken(conn *gorm.DB, token string) error {
-
+func CreateToken(conn *gorm.DB, token string, id string) error {
 	t := &Token{}
 	t.Login = token
+	t.UserId = id
 
 	err := conn.Create(t).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func GetIdByToken(conn *gorm.DB, token *Token, login_token string) error {
+	err := conn.Where("login = ?", login_token).First(token).Error
 	if err != nil {
 		return err
 	}
