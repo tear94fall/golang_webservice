@@ -12,8 +12,9 @@ const (
 	USERNAME = "root"
 	PASSWORD = "root1234"
 	DATABASE = "my_db"
-	HOST     = "docker.for.mac.localhost"
-	PORT     = "3306"
+	// HOST     = "docker.for.mac.localhost"
+	HOST = "localhost"
+	PORT = "3306"
 )
 
 type DBHandler struct {

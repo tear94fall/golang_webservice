@@ -5,7 +5,6 @@ import (
 	"main/auth"
 	"main/common"
 	"main/database"
-	"main/render"
 	"main/util"
 
 	"github.com/gin-gonic/gin"
@@ -48,10 +47,10 @@ func Login(c *gin.Context) {
 		c.Set("login", true)
 	}
 
-	render.Render(c, gin.H{
+	common.Render(c, gin.H{
 		"title":  "로그인 성공",
-		"member": login,
-	}, common.IndexHtml)
+		"member": member,
+	}, common.MemberLoginSuccessHtml)
 }
 
 func CheckLoginMember(member *LoginInfo) error {

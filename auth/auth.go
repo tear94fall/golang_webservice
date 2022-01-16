@@ -16,6 +16,17 @@ func CheckLoginToken(c *gin.Context, token string) error {
 	return nil
 }
 
+func GetIdByToken(c *gin.Context, token string) string {
+	db, _ := c.MustGet("mysql").(*database.DBHandler)
+
+	t := &database.Token{}
+	if err := database.GetIdByToken(db.DBConn, t, token); err != nil {
+		return ""
+	}
+
+	return t.UserId
+}
+
 func GenToken(member *database.Member) string {
 	id, _ := util.EncStr(member.UserId)
 	passwd := member.Password
