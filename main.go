@@ -44,6 +44,7 @@ func SetupRouter() *gin.Engine {
 		// business logic
 		memberGroup.POST("/login", member.Login)
 		memberGroup.POST("/register", member.Register)
+		memberGroup.POST("/modify", member.Modify)
 		memberGroup.POST("/delete", member.Delete)
 	}
 
