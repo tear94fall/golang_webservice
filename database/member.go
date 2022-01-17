@@ -50,7 +50,11 @@ func GetMemberByUserId(conn *gorm.DB, member *Member, userId string) error {
 }
 
 func UpdateMember(db *gorm.DB, member *Member) error {
-	db.Save(member)
+	err := db.Save(member).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
