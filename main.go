@@ -39,6 +39,7 @@ func SetupRouter() *gin.Engine {
 		memberGroup.GET("/login", render.MemberLoginPage)
 		memberGroup.GET("/register", render.MemberRegisterPage)
 		memberGroup.GET("/modify", render.MemberModifyPage)
+		memberGroup.GET("/delete", render.MemberDeletePage)
 		memberGroup.GET("/logout", member.Logout)
 
 		// business logic
