@@ -2,10 +2,11 @@ package member
 
 import (
 	"errors"
+	"fmt"
+	"main/auth"
 	"main/common"
 	"main/database"
 	"main/util"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,40 +17,50 @@ type DeleteInfo struct {
 }
 
 func Delete(c *gin.Context) {
-	id := c.PostForm("id")
-	password := c.PostForm("password")
+	password1 := c.PostForm("password1")
+	password2 := c.PostForm("password2")
 
-	EncPassword, _ := util.EncStr(password)
+	if password1 != password2 {
+		err := errors.New("비밀번호를 불일치")
+		common.ErrorPage(c, "비밀번호 두개가 일치하지 않습니다", err)
+		return
+	}
 
-	delete := &DeleteInfo{id, password}
+	if len(password1) == 0 || len(password2) == 0 {
+		err := errors.New("비밀번호를 입력해주세요")
+		common.ErrorPage(c, "입력된 비밀번호가 없습니다", err)
+		return
+	}
 
-	err := CheckDeleteMember(delete)
-	if err != nil {
-		common.ErrorPage(c, "회원탈퇴 실패", err)
+	member := Find(c)
+
+	EncPassword1, _ := util.EncStr(password1)
+
+	fmt.Println(member.Password)
+	fmt.Println(EncPassword1)
+
+	if member.Password != EncPassword1 {
+		err := errors.New("비밀번호 오류")
+		common.ErrorPage(c, "비밀번호가 일치하지 않습니다", err)
 		return
 	}
 
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
-	member := &database.Member{}
-	if err2 := database.GetMemberByUserId(db.DBConn, member, id); err2 != nil {
-		common.ErrorPage(c, "회원탈퇴 실패", err)
+	if err := database.DeleteMember(db.DBConn, member, member.UserId); err != nil {
+		fmt.Println(err)
+		err := errors.New("존재하지 않는 사용자")
+		common.ErrorPage(c, "회원 탈퇴에 실패하였습니다", err)
 		return
 	}
 
-	if EncPassword != member.Password {
-		common.ErrorPage(c, "가입되지 않은 사용자 입니다.", errors.New("invalid user id"))
-		return
-	}
+	token := auth.GenToken(member)
+	database.DeleteToken(db.DBConn, token, member.UserId)
 
-	if err3 := database.DeleteMember(db.DBConn, member, id); err3 != nil {
-		common.ErrorPage(c, "회원탈퇴 실패", err)
-		return
-	}
+	Logout(c)
 
-	c.HTML(http.StatusOK, common.IndexHtml, gin.H{
-		"title":   "회원 탈퇴 성공",
-		"user_id": id,
-	})
+	common.Render(c, gin.H{
+		"title": "회원 탈퇴 성공",
+	}, common.IndexHtml)
 }
 
 func CheckDeleteMember(member *DeleteInfo) error {

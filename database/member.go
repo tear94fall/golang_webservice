@@ -50,11 +50,19 @@ func GetMemberByUserId(conn *gorm.DB, member *Member, userId string) error {
 }
 
 func UpdateMember(db *gorm.DB, member *Member) error {
-	db.Save(member)
+	err := db.Save(member).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func DeleteMember(conn *gorm.DB, member *Member, id string) error {
-	conn.Where("id = ?", id).Delete(member)
+func DeleteMember(conn *gorm.DB, member *Member, userId string) error {
+	err := conn.Where("user_id = ?", userId).Delete(member).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
