@@ -35,6 +35,12 @@ func MemberModifyPage(c *gin.Context) {
 	}, common.MemberModifyHtml)
 }
 
+func MemberDeletePage(c *gin.Context) {
+	common.Render(c, gin.H{
+		"title": "탈퇴 하기",
+	}, common.MemberDeleteHtml)
+}
+
 func PostListPage(c *gin.Context) {
 	list := post.List(c)
 

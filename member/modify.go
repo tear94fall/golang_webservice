@@ -2,7 +2,6 @@ package member
 
 import (
 	"errors"
-	"fmt"
 	"main/auth"
 	"main/common"
 	"main/database"
@@ -40,11 +39,7 @@ func Modify(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(id, password, name, tel)
-
 	UpdateMember(member, modify)
-
-	fmt.Println(member.UserId, member.Name, member.Tel)
 
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	database.UpdateMember(db.DBConn, member)
