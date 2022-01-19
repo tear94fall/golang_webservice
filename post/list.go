@@ -11,6 +11,8 @@ func List(c *gin.Context) *[]database.Post {
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	list := &[]database.Post{}
 
+	RangePage(c, 1)
+
 	if err := database.GetPosts(db.DBConn, list); err != nil {
 		return nil
 	}

@@ -42,8 +42,8 @@ func GetPostById(conn *gorm.DB, post *Post, id string) error {
 	return nil
 }
 
-func GetPostRangeById(conn *gorm.DB, post *Post, start string, end string) error {
-	err := conn.Where("id => ? AND id <= ?", start, end).First(post).Error
+func GetPostRangeById(conn *gorm.DB, post *[]Post, start string, end string) error {
+	err := conn.Find(&post).Where("id => ? AND id <= ?", start, end).Error
 	if err != nil {
 		return err
 	}
@@ -60,12 +60,29 @@ func GetPostByWriter(conn *gorm.DB, post *Post, writer string) error {
 	return nil
 }
 
+func GetPostsCount(conn *gorm.DB, count *int64) error {
+	err := conn.Model(&Post{}).Count(count).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func UpdatePost(conn *gorm.DB, post *Post) error {
-	conn.Save(post)
+	err := conn.Save(post).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func DeletePost(conn *gorm.DB, post *Post, id string) error {
-	conn.Where("id = ?", id).Delete(post)
+	err := conn.Where("id = ?", id).Delete(post).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
