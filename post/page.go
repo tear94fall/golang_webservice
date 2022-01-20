@@ -1,6 +1,7 @@
 package post
 
 import (
+	"fmt"
 	"main/database"
 	"strconv"
 
@@ -20,16 +21,20 @@ func Page(c *gin.Context) []int64 {
 }
 
 func RangePage(c *gin.Context, index int) error {
+	const max int = 10
+
 	list := &[]database.Post{}
 
-	start := (index - 1) * 10
-	end := index * 10
+	start := (index - 1) * max
+	end := index * max
 
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 
 	if err := database.GetPostRangeById(db.DBConn, list, strconv.Itoa(start), strconv.Itoa(end)); err != nil {
 		return err
 	}
+
+	fmt.Println(list)
 
 	return nil
 }

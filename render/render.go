@@ -58,10 +58,12 @@ func PostRegisterPage(c *gin.Context) {
 
 func PostArticlePage(c *gin.Context) {
 	id := c.Param("id")
+	member := member.Find(c)
 	article := post.GetArticle(c, id)
 
 	common.Render(c, gin.H{
 		"title":   "게시글 보기",
+		"member":  member,
 		"article": article,
 	}, common.PostArticlePage)
 }

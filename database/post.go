@@ -43,7 +43,7 @@ func GetPostById(conn *gorm.DB, post *Post, id string) error {
 }
 
 func GetPostRangeById(conn *gorm.DB, post *[]Post, start string, end string) error {
-	err := conn.Find(&post).Where("id => ? AND id <= ?", start, end).Error
+	err := conn.Where("id >= ? AND id <= ?", start, end).Find(&post).Error
 	if err != nil {
 		return err
 	}
