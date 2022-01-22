@@ -2,6 +2,7 @@ package post
 
 import (
 	"main/database"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,17 @@ func List(c *gin.Context) *[]database.Post {
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	list := &[]database.Post{}
 
-	if err := database.GetPosts(db.DBConn, list); err != nil {
+	const max int64 = 10
+	var count int64
+
+	if err := database.GetPostsCount(db.DBConn, &count); err != nil {
+		return nil
+	}
+
+	start := strconv.FormatInt(count, 10)
+	end := strconv.FormatInt((count - max), 10)
+
+	if err := database.GetPostRangeById(db.DBConn, list, end, start); err != nil {
 		return nil
 	}
 
