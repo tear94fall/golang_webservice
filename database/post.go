@@ -79,7 +79,8 @@ func UpdatePost(conn *gorm.DB, post *Post) error {
 }
 
 func DeletePost(conn *gorm.DB, post *Post, id string) error {
-	err := conn.Where("id = ?", id).Delete(post).Error
+	// err := conn.Where("id = ?", id).Delete(post).Error
+	err := conn.Unscoped().Delete(&Post{}, id).Error
 	if err != nil {
 		return err
 	}
