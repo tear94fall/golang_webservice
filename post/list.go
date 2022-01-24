@@ -8,22 +8,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func List(c *gin.Context) *[]database.Post {
+func List(c *gin.Context) (*[]database.Post, *PageInfo) {
+	current := c.Param("index")
+	if len(current) != 0 {
+		current = "1"
+	}
+
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	list := &[]database.Post{}
 
-	const max int64 = 10
-	var count int64
+	pageInfo := NewPageInfo()
 
+	pageInfo.Current, _ = strconv.Atoi(current)
+
+	var count int64
 	if err := database.GetPostsCount(db.DBConn, &count); err != nil {
-		return nil
+		return nil, nil
 	}
 
-	start := strconv.FormatInt(count, 10)
-	end := strconv.FormatInt((count - max), 10)
+	pageInfo.Total = count
+	SetPageInfo(pageInfo)
 
-	if err := database.GetPostRangeById(db.DBConn, list, end, start); err != nil {
-		return nil
+	if err := database.GetPostPaged(db.DBConn, list, pageInfo.Current, pageInfo.Max); err != nil {
+		return nil, nil
 	}
 
 	for i := 0; i < len(*list); i++ {
@@ -31,5 +38,5 @@ func List(c *gin.Context) *[]database.Post {
 		(*list)[i].RegisterDate = slice[0]
 	}
 
-	return list
+	return list, pageInfo
 }

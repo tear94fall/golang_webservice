@@ -24,7 +24,7 @@
             <div>
                 <h1>게시판 입니다</h1>
             </div>
-            <table class="table table-hover">
+            <table class="table table-hover table-striped">
                 <thead>
                     <tr>
                         <th scope="col" class="text-center">제목</th>
@@ -46,12 +46,29 @@
                     {{ end }}
                 </tbody>
             </table>
-            {{if .login}}
-            <div>
-                <a href="/post/register" class="btn btn-success">글쓰기</a>
-            </div>
-            {{ end }}
         </form>
+        <hr />
+        {{if .login}}
+        <div>
+            <a href="/post/register" class="btn btn-success">글쓰기</a>
+        </div>
+        {{ end }}
+
+        <div class="text-center">
+            <ul class="pagination justify-content-center">
+                {{if .pages.Prev}}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{ .pages.Start }}">이전</a></li>
+                {{end}}
+
+                {{ range .pages.Indexes }}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{.}}">{{.}}</a></li>
+                {{ end }}
+
+                {{if .pages.Next}}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{ .page.End }}">다음</a></li>
+                {{end}}
+            </ul>
+        </div>
     </div>
 </body>
 
