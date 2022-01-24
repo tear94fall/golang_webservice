@@ -51,6 +51,25 @@ func GetPostRangeById(conn *gorm.DB, post *[]Post, start string, end string) err
 	return nil
 }
 
+func GetPostPaged(conn *gorm.DB, post *[]Post, current int, max int) error {
+	var count int64 = 0
+
+	offset := ((current - 1) * max)
+
+	err := conn.
+		Where("id > 0").
+		Select("*").
+		Offset(offset).
+		Limit(max).
+		Order(" id desc ").Find(&post).Count(&count).Error
+
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
+
 func GetPostByWriter(conn *gorm.DB, post *Post, writer string) error {
 	err := conn.Where("user_id = ?", writer).First(post).Error
 	if err != nil {

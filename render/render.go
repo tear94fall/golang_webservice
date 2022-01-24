@@ -42,11 +42,12 @@ func MemberDeletePage(c *gin.Context) {
 }
 
 func PostListPage(c *gin.Context) {
-	list := post.List(c)
+	list, page := post.List(c)
 
 	common.Render(c, gin.H{
 		"title": "게시글 목록",
 		"posts": list,
+		"pages": page,
 	}, common.PostListHtml)
 }
 
