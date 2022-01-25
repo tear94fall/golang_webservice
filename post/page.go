@@ -2,8 +2,8 @@ package post
 
 type PageInfo struct {
 	Total   int64
-	Prev    bool
-	Next    bool
+	Prev    int
+	Next    int
 	Current int
 	Start   int
 	End     int
@@ -16,7 +16,7 @@ const (
 )
 
 func NewPageInfo() *PageInfo {
-	pageInfo := &PageInfo{0, false, false, 0, 1, 0, nil, max}
+	pageInfo := &PageInfo{0, 0, 0, 0, 1, 0, nil, max}
 
 	return pageInfo
 }
@@ -26,14 +26,21 @@ func SetPageInfo(pageInfo *PageInfo) error {
 	pageInfo.End = (int(pageInfo.Total) / pageInfo.Max) + 1
 
 	if pageInfo.Current > 1 {
-		pageInfo.Prev = true
+		pageInfo.Prev = pageInfo.Current - 1
 	}
 
-	if pageInfo.Current < pageInfo.End {
-		pageInfo.Next = true
+	if pageInfo.Current < pageInfo.End && pageInfo.End >= max {
+		pageInfo.Next = pageInfo.Current + 1
 	}
 
-	for i := pageInfo.Start; i < pageInfo.End; i++ {
+	pageMax := func(pages int) int {
+		if pages > max {
+			return max
+		}
+		return pages
+	}(pageInfo.End)
+
+	for i := pageInfo.Start; i <= pageMax; i++ {
 		pageInfo.Indexes = append(pageInfo.Indexes, i)
 	}
 
