@@ -26,7 +26,6 @@
 					<div class="panel-heading">
 						<h3 class="mb-5">{{.title}}</h3>
 					</div>
-					{{if .member}}
 					<div class="panel-body">
 						<form class="form" id="login-form" action="../modify" method="POST">
                             <input type="hidden" id="article-id" name="article-id" value="{{ .article.Id }}">
@@ -46,7 +45,6 @@
 							{{end}}
 						</form>
 					</div>
-					{{end}}
 					{{ if eq .member.UserId .article.Writer }}
 					<div class="delete-from">
 						<form class="delete" id="delete-form" action="../delete" method="POST">
@@ -56,10 +54,12 @@
 							</div>
 						</form>
 					</div>
-					{{end}}
-					<a href="/post/list">
-						<button class="btn btn-primary btn-lg btn-block mb-4" type="submit">목록으로</button>
-					</a>
+					{{ end }}
+					<div>
+						<a href="/post/list">
+							<button class="btn btn-primary btn-lg btn-block mb-4" type="submit">목록으로</button>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

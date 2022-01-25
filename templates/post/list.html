@@ -27,6 +27,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th scope="col" class="text-center">번호</th>
                         <th scope="col" class="text-center">제목</th>
                         <th scope="col" class="text-center">글쓴이</th>
                         <th scope="col" class="text-center">작성일</th>
@@ -36,7 +37,8 @@
                 <tbody>
                     {{ range .posts }}
                     <tr>
-                        <td style="width: 60%">
+                        <td style="width: 10%">{{ .Id }}</td>
+                        <td style="width: 50%">
                             <a class="text-reset" href="/post/article/{{ .Id }}">{{ .Title }}</a>
                         </td>
                         <td style="width: 10%" class="text-center">{{ .Writer }}</td>
@@ -46,12 +48,33 @@
                     {{ end }}
                 </tbody>
             </table>
-            {{if .login}}
-            <div>
-                <a href="/post/register" class="btn btn-success">글쓰기</a>
-            </div>
-            {{ end }}
         </form>
+        <hr />
+        {{if .login}}
+        <div>
+            <a href="/post/register" class="btn btn-success">글쓰기</a>
+        </div>
+        {{ end }}
+
+        <div class="text-center">
+            <ul class="pagination justify-content-center">
+                {{ if eq .pages.Prev 0 }}
+                <li class="page-item disabled"><a class="page-link"  href="/post/list/{{ .pages.Prev }}">이전</a></li>
+                {{ else }}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{ .pages.Prev }}">이전</a></li>
+                {{ end }}
+
+                {{ range .pages.Indexes }}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{.}}">{{.}}</a></li>
+                {{ end }}
+
+                {{ if eq .pages.Next 0 }}
+                <li class="page-item disabled"><a class="page-link"  href="/post/list/{{ .page.Next }}">다음</a></li>
+                {{ else }}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{ .page.Next }}">다음</a></li>
+                {{ end }}
+            </ul>
+        </div>
     </div>
 </body>
 

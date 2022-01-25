@@ -1,40 +1,48 @@
 package post
 
-import (
-	"fmt"
-	"main/database"
-	"strconv"
-
-	"github.com/gin-gonic/gin"
-)
-
-func Page(c *gin.Context) []int64 {
-	count := Count(c)
-
-	var pages []int64
-
-	for i := 1; int64(i) <= count; i++ {
-		pages = append(pages, int64(i))
-	}
-
-	return pages
+type PageInfo struct {
+	Total   int64
+	Prev    int
+	Next    int
+	Current int
+	Start   int
+	End     int
+	Indexes []int
+	Max     int
 }
 
-func RangePage(c *gin.Context, index int) error {
-	const max int = 10
+const (
+	max int = 10
+)
 
-	list := &[]database.Post{}
+func NewPageInfo() *PageInfo {
+	pageInfo := &PageInfo{0, 0, 0, 0, 1, 0, nil, max}
 
-	start := (index - 1) * max
-	end := index * max
+	return pageInfo
+}
 
-	db, _ := c.MustGet("mysql").(*database.DBHandler)
+func SetPageInfo(pageInfo *PageInfo) error {
+	pageInfo.Start = pageInfo.Current
+	pageInfo.End = (int(pageInfo.Total) / pageInfo.Max) + 1
 
-	if err := database.GetPostRangeById(db.DBConn, list, strconv.Itoa(start), strconv.Itoa(end)); err != nil {
-		return err
+	if pageInfo.Current > 1 {
+		pageInfo.Prev = pageInfo.Current - 1
 	}
 
-	fmt.Println(list)
+	if pageInfo.Current < pageInfo.End && pageInfo.End >= max {
+		pageInfo.Next = pageInfo.Current + 1
+	}
+
+	pageMax := func(pages int) int {
+		if pages > max {
+			return max
+		}
+		return pages
+	}(pageInfo.End)
+
+	for i := pageInfo.Start; i <= pageMax; i++ {
+		pageInfo.Indexes = append(pageInfo.Indexes, i)
+	}
 
 	return nil
 }

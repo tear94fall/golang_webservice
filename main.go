@@ -54,7 +54,8 @@ func SetupRouter() *gin.Engine {
 	{
 		// page render
 		postGroup.GET("/register", render.PostRegisterPage)
-		postGroup.GET("/list", render.PostListPage)
+		postGroup.GET("/list/", render.PostListPage)
+		postGroup.GET("/list/:index", render.PostListPage)
 		postGroup.GET("/article/:id", render.PostArticlePage)
 
 		// business logic
