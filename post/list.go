@@ -10,7 +10,8 @@ import (
 
 func List(c *gin.Context) (*[]database.Post, *PageInfo) {
 	current := c.Param("index")
-	if len(current) != 0 {
+
+	if len(current) == 0 || current == "" {
 		current = "1"
 	}
 
