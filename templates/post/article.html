@@ -30,36 +30,41 @@
 						<form class="form" id="login-form" action="../modify" method="POST">
                             <input type="hidden" id="article-id" name="article-id" value="{{ .article.Id }}">
 							<div class="form-group mb-4">
+								<label for="title" class="col-sm-2 control-label">제목</label>
 								<input type="text" class="form-control form-control-lg" id="title" name="title" value="{{ .article.Title }}" autofocus>
 							</div>
 							<div class="form-group mb-4">
+								<label for="content" class="col-sm-2 control-label">내용</label>
 								<input type="text" class="form-control form-control-lg" id="content" name="content" value="{{ .article.Content }}">
 							</div>
                             <div class="form-group mb-4">
-								<input type="text" class="form-control form-control-lg" id="writer" name="writer" value="{{ .article.Writer }}">
+								<label for="writer" class="col-sm-2 control-label">작성자</label>
+								<input type="text" class="form-control form-control-lg" id="writer" name="writer" value="{{ .article.Writer }}" readonly="readonly">
 							</div>
-							{{ if eq .member.UserId .article.Writer }}
+							{{ if not .member }}
+							{{ else if eq .member.UserId .article.Writer }}
 							<div>
 								<button class="btn btn-success btn-lg btn-block mb-4" type="submit">수정 하기</button>
 							</div>
-							{{end}}
+							{{ end }}
 						</form>
 					</div>
-					{{ if eq .member.UserId .article.Writer }}
-					<div class="delete-from">
-						<form class="delete" id="delete-form" action="../delete" method="POST">
-							<input type="hidden" id="article-id" name="article-id" value="{{ .article.Id }}">
-							<div>
-								<button class="btn btn-danger btn-lg btn-block mb-4" type="submit">삭제 하기</button>
-							</div>
-						</form>
-					</div>
-					{{ end }}
-					<div>
-						<a href="/post/list">
-							<button class="btn btn-primary btn-lg btn-block mb-4" type="submit">목록으로</button>
-						</a>
-					</div>
+				</div>
+				{{ if not .member }}
+				{{ else if eq .member.UserId .article.Writer }}
+				<div class="delete-from">
+					<form class="delete" id="delete-form" action="../delete" method="POST">
+						<input type="hidden" id="article-id" name="article-id" value="{{ .article.Id }}">
+						<div>
+							<button class="btn btn-danger btn-lg btn-block mb-4" type="submit">삭제 하기</button>
+						</div>
+					</form>
+				</div>
+				{{ end }}
+				<div>
+					<a href="/post/list">
+						<button class="btn btn-primary btn-lg btn-block mb-4" type="submit">목록으로</button>
+					</a>
 				</div>
 			</div>
 		</div>

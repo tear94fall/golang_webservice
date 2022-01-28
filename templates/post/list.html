@@ -50,11 +50,13 @@
             </table>
         </form>
         <hr />
-        {{if .login}}
+        
         <div>
+            <a href="/" class="btn btn-primary">홈으로</a>
+            {{if .login}}
             <a href="/post/register" class="btn btn-success">글쓰기</a>
+            {{ end }}
         </div>
-        {{ end }}
 
         <div class="text-center">
             <ul class="pagination justify-content-center">
