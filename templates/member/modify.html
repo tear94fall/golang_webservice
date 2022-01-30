@@ -42,7 +42,7 @@
 								<input type="tel" class="form-control form-control-lg" id="tel" name="tel" value="{{.member.Tel}}" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
 							</div>
 							<div>
-								<button class="btn btn-primary btn-lg btn-block mb-4" type="submit">변경 하기</button>
+								<button class="btn btn-warning btn-lg btn-block mb-4" type="submit">변경 하기</button>
 							</div>
 						</form>
 						<a href="/member/delete">
@@ -50,6 +50,11 @@
 						</a>			
 					</div>
 					{{end}}
+					<div>
+						<a href="/">
+							<button class="btn btn-primary btn-lg btn-block mb-4" type="submit">홈으로</button>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
