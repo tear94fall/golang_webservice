@@ -39,6 +39,32 @@ func DeleteToken(conn *gorm.DB, token string, id string) error {
 	return nil
 }
 
+func UpdateToken(conn *gorm.DB, token string, id string) error {
+	t := &Token{}
+
+	if err := GetTokenById(conn, t, id); err != nil {
+		return err
+	}
+
+	t.Login = token
+
+	err := conn.Save(t).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func GetTokenById(conn *gorm.DB, token *Token, id string) error {
+	err := conn.Where("user_id = ?", id).First(token).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func GetIdByToken(conn *gorm.DB, token *Token, login_token string) error {
 	err := conn.Where("login = ?", login_token).First(token).Error
 	if err != nil {

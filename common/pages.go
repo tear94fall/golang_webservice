@@ -10,6 +10,9 @@ const (
 	MemberRegisterHtml     string = "member/register.html"
 	MemberModifyHtml       string = "member/modify.html"
 	MemberDeleteHtml       string = "member/delete.html"
+	MemberForgetHtml       string = "member/forget.html"
+	MemberResetHtml        string = "member/reset.html"
+	MemberResetSuccessHtml string = "member/reset-success.html"
 
 	// post
 	PostRegisterHtml string = "post/register.html"
