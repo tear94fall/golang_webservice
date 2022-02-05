@@ -40,6 +40,8 @@ func SetupRouter() *gin.Engine {
 		memberGroup.GET("/register", render.MemberRegisterPage)
 		memberGroup.GET("/modify", render.MemberModifyPage)
 		memberGroup.GET("/delete", render.MemberDeletePage)
+		memberGroup.GET("/forget", render.MemberForgetPage)
+		memberGroup.GET("/reset", render.MemberResetPage)
 		memberGroup.GET("/logout", member.Logout)
 
 		// business logic
@@ -47,6 +49,8 @@ func SetupRouter() *gin.Engine {
 		memberGroup.POST("/register", member.Register)
 		memberGroup.POST("/modify", member.Modify)
 		memberGroup.POST("/delete", member.Delete)
+		memberGroup.POST("/forget", member.Forget)
+		memberGroup.POST("/reset", member.Reset)
 	}
 
 	// post
@@ -61,7 +65,7 @@ func SetupRouter() *gin.Engine {
 		// business logic
 		postGroup.POST("/register", post.Register)
 		postGroup.POST("/modify", post.Modify)
-		postGroup.POST("/delete", post.Delete)
+		postGroup.GET("/delete/:id", post.Delete)
 	}
 
 	return r

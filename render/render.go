@@ -41,6 +41,18 @@ func MemberDeletePage(c *gin.Context) {
 	}, common.MemberDeleteHtml)
 }
 
+func MemberForgetPage(c *gin.Context) {
+	common.Render(c, gin.H{
+		"title": "비밀번호 찾기",
+	}, common.MemberForgetHtml)
+}
+
+func MemberResetPage(c *gin.Context) {
+	common.Render(c, gin.H{
+		"title": "비밀번호 초기화",
+	}, common.MemberResetHtml)
+}
+
 func PostListPage(c *gin.Context) {
 	list, page := post.List(c)
 	member := member.Find(c)
