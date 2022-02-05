@@ -3,22 +3,26 @@ package post
 import (
 	"main/common"
 	"main/database"
-	"net/http"
-	"path/filepath"
-	"strings"
+	"main/member"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Delete(c *gin.Context) {
-	id := c.PostForm("article-id")
+	id := c.Param("id")
 
 	post := GetArticle(c, id)
 
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	database.DeletePost(db.DBConn, post, id)
 
-	postListPath := filepath.Base(common.PostListHtml)
-	postList := strings.TrimSuffix(postListPath, filepath.Ext(postListPath))
-	c.Redirect(http.StatusMovedPermanently, postList)
+	list, page := List(c)
+	member := member.Find(c)
+
+	common.Render(c, gin.H{
+		"title":  "게시글 목록",
+		"posts":  list,
+		"pages":  page,
+		"member": member,
+	}, common.PostListHtml)
 }

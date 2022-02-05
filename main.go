@@ -65,7 +65,7 @@ func SetupRouter() *gin.Engine {
 		// business logic
 		postGroup.POST("/register", post.Register)
 		postGroup.POST("/modify", post.Modify)
-		postGroup.POST("/delete", post.Delete)
+		postGroup.GET("/delete/:id", post.Delete)
 	}
 
 	return r
