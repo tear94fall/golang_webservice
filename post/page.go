@@ -23,7 +23,11 @@ func NewPageInfo() *PageInfo {
 
 func SetPageInfo(pageInfo *PageInfo) error {
 	pageInfo.Start = pageInfo.Current
-	pageInfo.End = (int(pageInfo.Total) / pageInfo.Max) + 1
+	pageInfo.End = (int(pageInfo.Total) / pageInfo.Max)
+
+	if int(pageInfo.Total)%pageInfo.Max != 0 {
+		pageInfo.End += 1
+	}
 
 	if pageInfo.Current > 1 {
 		pageInfo.Prev = pageInfo.Current - 1
