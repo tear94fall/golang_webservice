@@ -52,6 +52,55 @@
 					</div>
 				</form>
 			</div>
+
+			<div id="comment">
+				<ol class="comment-list">
+					{{ $userid := "" }}
+					{{ if .member }}
+						{{ $userid = .member.UserId }}
+					{{ end }}
+
+					{{ range .comments }}
+					<li class="mb-4">
+						작성자 : {{ .Writer }}<br />
+						작성 날짜 : {{ .RegisterDate }}
+						<p>{{ .Content }}</p>
+						<div>
+							{{ if eq .Writer $userid }}
+							<button type="button" class="replyUpdateBtn btn btn-warning">수정</button>
+							<button type="button" class="replyDeleteBtn btn btn-danger">삭제</button>
+							{{ end }}
+						</div>
+					</li>
+					{{ end }}
+				</ol>
+			</div>
+
+			{{ if .member }}
+			<form class="form-horizontal" name="comment-form" action="../../comment/register" method="post">
+				<input type="hidden" id="article-id" name="article-id" value="{{ .article.Id }}">
+			
+				<div class="form-group">
+					<label for="writer" class="col-sm-2 control-label">댓글 작성자</label>
+					<div class="col-sm-10">
+						<input type="text" id="writer" name="writer" class="form-control" value="{{ .member.UserId }}"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">댓글 내용</label>
+					<div class="col-sm-10">
+						<textarea type="text" id="content" name="content" class="form-control"></textarea>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button class="replyWriteBtn btn btn-success" type="submit">작성</button>
+					</div>
+				</div>
+			</form>
+			{{ end }}
 		</section>
 	</div>
 </body>
