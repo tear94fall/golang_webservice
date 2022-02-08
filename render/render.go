@@ -1,6 +1,7 @@
 package render
 
 import (
+	"main/comment"
 	"main/common"
 	"main/member"
 	"main/post"
@@ -75,10 +76,12 @@ func PostArticlePage(c *gin.Context) {
 	id := c.Param("id")
 	member := member.Find(c)
 	article := post.GetArticle(c, id)
+	comments := comment.List(c, id)
 
 	common.Render(c, gin.H{
-		"title":   "게시글 보기",
-		"member":  member,
-		"article": article,
+		"title":    "게시글 보기",
+		"member":   member,
+		"article":  article,
+		"comments": comments,
 	}, common.PostArticlePage)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"main/auth"
+	"main/comment"
 	"main/database"
 	"main/member"
 	"main/post"
@@ -66,6 +67,13 @@ func SetupRouter() *gin.Engine {
 		postGroup.POST("/register", post.Register)
 		postGroup.POST("/modify", post.Modify)
 		postGroup.GET("/delete/:id", post.Delete)
+	}
+
+	// comment
+	commentGroup := r.Group("/comment")
+	{
+		// business logic
+		commentGroup.POST("/register", comment.Register)
 	}
 
 	return r
