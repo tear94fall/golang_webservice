@@ -31,6 +31,25 @@ func GetCommentByArticleId(conn *gorm.DB, comment *[]Comment, id string) error {
 	return nil
 }
 
+func GetCommentById(conn *gorm.DB, comment *Comment, id string) error {
+	err := conn.Where("id = ?", id).First(comment).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func GetArticleIdByCommentId(conn *gorm.DB, comment_id string) (string, error) {
+	comment := &Comment{}
+	err := conn.Where("id = ?", comment_id).First(comment).Error
+	if err != nil {
+		return "", err
+	}
+
+	return comment.ArticleId, nil
+}
+
 func DeleteCommentByCommentId(conn *gorm.DB, id string) error {
 
 	return nil
@@ -42,20 +61,16 @@ func DeleteCommentByArticleId(conn *gorm.DB, id string) error {
 }
 
 func DeleteComment(conn *gorm.DB, comment *Comment) error {
+	err := conn.Unscoped().Delete(&Comment{}, comment.Id).Error
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
-func UpdateComment(conn *gorm.DB, token string, id string) error {
-	t := &Token{}
-
-	if err := GetTokenById(conn, t, id); err != nil {
-		return err
-	}
-
-	t.Login = token
-
-	err := conn.Save(t).Error
+func UpdateComment(conn *gorm.DB, comment *Comment) error {
+	err := conn.Save(comment).Error
 	if err != nil {
 		return err
 	}

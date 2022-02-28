@@ -72,6 +72,20 @@ func PostRegisterPage(c *gin.Context) {
 	}, common.PostRegisterHtml)
 }
 
+func PostModifyPage(c *gin.Context) {
+	id := c.Param("id")
+	member := member.Find(c)
+	article := post.GetArticle(c, id)
+	comments := comment.List(c, id)
+
+	common.Render(c, gin.H{
+		"title":    "게시글 수정하기",
+		"member":   member,
+		"article":  article,
+		"comments": comments,
+	}, common.PostModifyHtml)
+}
+
 func PostArticlePage(c *gin.Context) {
 	id := c.Param("id")
 	member := member.Find(c)
@@ -83,5 +97,19 @@ func PostArticlePage(c *gin.Context) {
 		"member":   member,
 		"article":  article,
 		"comments": comments,
-	}, common.PostArticlePage)
+	}, common.PostArticleHtml)
+}
+
+func CommentModifyPage(c *gin.Context) {
+	id := c.Param("id")
+	member := member.Find(c)
+	comment := comment.GetComment(c, id)
+	article := post.GetArticle(c, comment.ArticleId)
+
+	common.Render(c, gin.H{
+		"title":   "댓글 수정하기",
+		"member":  member,
+		"article": article,
+		"comment": comment,
+	}, common.CommenttModifyHtml)
 }

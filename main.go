@@ -59,6 +59,7 @@ func SetupRouter() *gin.Engine {
 	{
 		// page render
 		postGroup.GET("/register", render.PostRegisterPage)
+		postGroup.GET("/modify/:id", render.PostModifyPage)
 		postGroup.GET("/list/", render.PostListPage)
 		postGroup.GET("/list/:index", render.PostListPage)
 		postGroup.GET("/article/:id", render.PostArticlePage)
@@ -72,8 +73,13 @@ func SetupRouter() *gin.Engine {
 	// comment
 	commentGroup := r.Group("/comment")
 	{
+		// page render
+		commentGroup.GET("/modify/:id", render.CommentModifyPage)
+
 		// business logic
 		commentGroup.POST("/register", comment.Register)
+		commentGroup.POST("/modify", comment.Modify)
+		commentGroup.GET("/delete/:id", comment.Delete)
 	}
 
 	return r

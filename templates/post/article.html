@@ -28,11 +28,11 @@
 					<input type="hidden" id="article-id" name="article-id" value="{{ .article.Id }}">
 					<div class="form-group mb-3">
 						<label for="title" class="control-label">제목</label>
-						<input type="text" class="form-control form-control-lg" id="title" name="title" value="{{ .article.Title }}" autofocus>
+						<input type="text" class="form-control form-control-lg" id="title" name="title" value="{{ .article.Title }}" readonly="readonly" autofocus>
 					</div>
 					<div class="form-group mb-3">
 						<label for="content" class="control-label">내용</label>
-						<textarea type="text" class="form-control form-control-lg" id="content" name="content" rows="5">{{ .article.Content }}</textarea>
+						<textarea type="text" class="form-control form-control-lg" id="content" name="content" rows="5" readonly="readonly">{{ .article.Content }}</textarea>
 					</div>
 					<div class="form-group mb-4">
 						<label for="writer" class="control-label">작성자</label>
@@ -41,13 +41,15 @@
 					<div class="mt-3">
                         {{ if not .member }}
                         {{ else if eq .member.UserId .article.Writer }}
-						<button class="btn btn-lg btn-warning col-3 mb-4" type="submit">수정 하기</button>
+						<a href="/post/modify/{{ .article.Id }}">
+							<button class="btn btn-lg btn-warning col-2 mb-4" type="button">수정 하기</button>
+						</a>
 						<a href="/post/delete/{{ .article.Id }}">
-							<button class="btn btn-danger btn-lg col-3 mb-4" type="button">삭제 하기</button>
+							<button class="btn btn-danger btn-lg col-2 mb-4" type="button">삭제 하기</button>
 						</a>
                         {{ end }}
 						<a href="/post/list">
-							<button class="btn btn-primary btn-lg col-3 mb-4" type="button">목록으로</button>
+							<button class="btn btn-primary btn-lg col-2 mb-4" type="button">목록으로</button>
 						</a>
 					</div>
 				</form>
@@ -67,8 +69,12 @@
 						<p>{{ .Content }}</p>
 						<div>
 							{{ if eq .Writer $userid }}
-							<button type="button" class="replyUpdateBtn btn btn-warning">수정</button>
-							<button type="button" class="replyDeleteBtn btn btn-danger">삭제</button>
+							<a href="/comment/modify/{{ .Id }}">
+								<button type="button" class="replyUpdateBtn btn btn-warning">수정</button>
+							</a>
+							<a href="/comment/delete/{{ .Id }}">
+								<button type="button" class="replyDeleteBtn btn btn-danger">삭제</button>
+							</a>
 							{{ end }}
 						</div>
 					</li>
@@ -83,7 +89,7 @@
 				<div class="form-group">
 					<label for="writer" class="col-sm-2 control-label">댓글 작성자</label>
 					<div class="col-sm-10">
-						<input type="text" id="writer" name="writer" class="form-control" value="{{ .member.UserId }}"/>
+						<input type="text" id="writer" name="writer" class="form-control" value="{{ .member.UserId }}" readonly="readonly"/>
 					</div>
 				</div>
 				
