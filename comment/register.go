@@ -29,7 +29,7 @@ func Register(c *gin.Context) {
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	database.CreateComment(db.DBConn, comment)
 
-	postArticle := "/" + strings.TrimSuffix(common.PostArticlePage, filepath.Ext(common.PostArticlePage)) + "/" + id
+	postArticle := "/" + strings.TrimSuffix(common.PostArticleHtml, filepath.Ext(common.PostArticleHtml)) + "/" + id
 	c.Redirect(http.StatusMovedPermanently, postArticle)
 }
 

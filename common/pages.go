@@ -16,8 +16,12 @@ const (
 
 	// post
 	PostRegisterHtml string = "post/register.html"
+	PostModifyHtml   string = "post/modify.html"
 	PostListHtml     string = "post/list.html"
-	PostArticlePage  string = "post/article.html"
+	PostArticleHtml  string = "post/article.html"
+
+	// comment
+	CommenttModifyHtml string = "comment/modify.html"
 
 	// common
 	NotFoundHtml string = "common/404.html"

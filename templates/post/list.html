@@ -21,9 +21,9 @@
 <body>
     <div class="container">
         <form id="post-list" name="post-list" method="post">
-            <div>
-                <h1>게시판 입니다</h1>
-            </div>
+			<div class="panel-heading">
+				<h3 class="mb-5">{{.title}}</h3>
+			</div>
             <div>
                 {{ if not .member }}
                 <p>환영 합니다! <a href="/member/login">로그인</a> 하시면 더 많은 서비스 이용이 가능합니다.</p>
