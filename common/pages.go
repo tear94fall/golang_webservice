@@ -1,6 +1,9 @@
 package common
 
 const (
+	// attach path
+	AttachPath string = "attaches"
+
 	// home
 	IndexHtml string = "home/index.html"
 
@@ -15,10 +18,11 @@ const (
 	MemberResetSuccessHtml string = "member/reset-success.html"
 
 	// post
-	PostRegisterHtml string = "post/register.html"
-	PostModifyHtml   string = "post/modify.html"
-	PostListHtml     string = "post/list.html"
-	PostArticleHtml  string = "post/article.html"
+	PostRegisterHtml      string = "post/register.html"
+	PostModifyHtml        string = "post/modify.html"
+	PostListHtml          string = "post/list.html"
+	PostArticleHtml       string = "post/article.html"
+	PostArticleAttachHtml string = "post/attach.html"
 
 	// comment
 	CommenttModifyHtml string = "comment/modify.html"

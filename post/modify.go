@@ -1,6 +1,7 @@
 package post
 
 import (
+	"main/attach"
 	"main/common"
 	"main/database"
 	"net/http"
@@ -25,6 +26,8 @@ func Modify(c *gin.Context) {
 
 	ModifiedPost(register, modified)
 	database.UpdatePost(db.DBConn, register)
+
+	attach.SaveAttachFile(c, id)
 
 	articlePagePath := common.PostArticleHtml
 	articlePage := strings.TrimSuffix(articlePagePath, filepath.Ext(articlePagePath))
