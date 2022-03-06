@@ -13,4 +13,4 @@ docker rmi golang-webservice
 docker build -t golang-webservice .
 
 # run container
-docker run -d -it -p 8080:8080 --name go-web golang-webservice
+docker run --name go-web -d -it -p 8080:8080 -v `pwd`/tmp:/app/attaches golang-webservice

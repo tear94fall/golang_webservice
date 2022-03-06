@@ -2,10 +2,12 @@ package post
 
 import (
 	"errors"
+	"main/attach"
 	"main/common"
 	"main/database"
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -35,6 +37,8 @@ func Register(c *gin.Context) {
 
 	db, _ := c.MustGet("mysql").(*database.DBHandler)
 	database.CreatePost(db.DBConn, post)
+
+	attach.SaveAttachFile(c, strconv.Itoa(post.Id))
 
 	postListPath := filepath.Base(common.PostListHtml)
 	postList := strings.TrimSuffix(postListPath, filepath.Ext(postListPath))
