@@ -1,51 +1,63 @@
 package post
 
+import "math"
+
 type PageInfo struct {
-	Total   int64
-	Prev    int
-	Next    int
-	Current int
-	Start   int
-	End     int
-	Indexes []int
-	Max     int
+	Total    int64
+	Prev     int
+	Next     int
+	Current  int
+	Start    int
+	End      int
+	LIndexes []int
+	RIndexes []int
 }
 
 const (
-	max int = 10
+	column_max int = 10
+	search_max int = 10
 )
 
 func NewPageInfo() *PageInfo {
-	pageInfo := &PageInfo{0, 0, 0, 0, 1, 0, nil, max}
+	pageInfo := &PageInfo{}
 
 	return pageInfo
 }
 
 func SetPageInfo(pageInfo *PageInfo) error {
+	if pageInfo.Total == 0 {
+		return nil
+	}
+
 	pageInfo.Start = pageInfo.Current
-	pageInfo.End = (int(pageInfo.Total) / pageInfo.Max)
+	pageInfo.End = (int)(math.Ceil((float64(pageInfo.Total) / float64(search_max))))
+	pageInfo.Prev = pageInfo.Current - 1
+	pageInfo.Next = pageInfo.Current + 1
 
-	if int(pageInfo.Total)%pageInfo.Max != 0 {
-		pageInfo.End += 1
-	}
-
-	if pageInfo.Current > 1 {
-		pageInfo.Prev = pageInfo.Current - 1
-	}
-
-	if pageInfo.Current < pageInfo.End && pageInfo.End >= max {
-		pageInfo.Next = pageInfo.Current + 1
-	}
-
-	pageMax := func(pages int) int {
-		if pages > max {
-			return max
+	pageMax := func(current int, end int) int {
+		if end-current > search_max {
+			return current + search_max
 		}
-		return pages
-	}(pageInfo.End)
+		return end
+	}(pageInfo.Current, pageInfo.End)
 
-	for i := pageInfo.Start; i <= pageMax; i++ {
-		pageInfo.Indexes = append(pageInfo.Indexes, i)
+	pageMin := func(current int, end int) int {
+		if end-current < search_max {
+			return end - search_max
+		}
+		return pageInfo.Start
+	}(pageInfo.Current, pageInfo.End)
+
+	for i := pageMin; i < pageInfo.Current; i++ {
+		pageInfo.LIndexes = append(pageInfo.LIndexes, i)
+	}
+
+	for i := pageInfo.Current + 1; i < pageMax; i++ {
+		pageInfo.RIndexes = append(pageInfo.RIndexes, i)
+	}
+
+	if pageInfo.Current == pageInfo.End {
+		pageInfo.Next = 0
 	}
 
 	return nil
