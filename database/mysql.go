@@ -45,6 +45,7 @@ func NewDBHandler() (*DBHandler, error) {
 	db.AutoMigrate(&Post{})
 	db.AutoMigrate(&Token{})
 	db.AutoMigrate(&Comment{})
+	db.AutoMigrate(&Attach{})
 
 	db_handler.DBConn = db
 

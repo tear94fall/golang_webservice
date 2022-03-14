@@ -30,7 +30,7 @@ func List(c *gin.Context) (*[]database.Post, *PageInfo) {
 	pageInfo.Total = count
 	SetPageInfo(pageInfo)
 
-	if err := database.GetPostPaged(db.DBConn, list, pageInfo.Current, pageInfo.Max); err != nil {
+	if err := database.GetPostPaged(db.DBConn, list, pageInfo.Current, column_max); err != nil {
 		return nil, nil
 	}
 

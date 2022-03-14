@@ -1,0 +1,19 @@
+{{ define "post/attach.html" }}
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+  <title>이미지 보기</title>
+</head>
+<body>
+  <div class="margin-body-log-in-worker">
+        <div class="row">
+          {{range .images}}
+          <div class="col-4 col-sm-4 col-md-3 col-xl-2 center">
+                <img src="data:image/png;base64,{{.}}" class="img-fluid image-dashboard" />
+          </div>
+          {{end}}
+        </div>
+      </div>
+</body>
+</html>
+{{ end }}

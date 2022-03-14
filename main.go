@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"main/attach"
 	"main/auth"
 	"main/comment"
+	"main/common"
 	"main/database"
 	"main/member"
 	"main/post"
 	"main/render"
+	"main/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +28,8 @@ func SetupRouter() *gin.Engine {
 		fmt.Println("DB init fail")
 		panic("mysql init fail")
 	}
+
+	util.MakeDirectory(common.AttachPath)
 
 	r.Use(MysqlContext(mysql))
 	r.Use(AuthContext())
@@ -63,11 +68,13 @@ func SetupRouter() *gin.Engine {
 		postGroup.GET("/list/", render.PostListPage)
 		postGroup.GET("/list/:index", render.PostListPage)
 		postGroup.GET("/article/:id", render.PostArticlePage)
+		postGroup.GET("/article/:id/:file", render.PostArticleAttachPage)
 
 		// business logic
 		postGroup.POST("/register", post.Register)
 		postGroup.POST("/modify", post.Modify)
 		postGroup.GET("/delete/:id", post.Delete)
+		postGroup.GET("/delete/attach/:id", attach.Delete)
 	}
 
 	// comment
