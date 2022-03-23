@@ -58,15 +58,33 @@
         </form>
         <hr />
         
-        <div>
+        <div class="mb-3">
             <a href="/" class="btn btn-primary">홈으로</a>
             {{if .login}}
             <a href="/post/register" class="btn btn-success">글쓰기</a>
             {{ end }}
         </div>
 
+        <div class="mb-3">
+            <form class="form-inline justify-content-center">
+                <div class="form-group mx-sm-3 mb-3">
+                    <label for="keyword" class="sr-only">검색어</label>
+                    <input type="text" class="form-control" id="keyword" placeholder="검색어">
+                </div>
+                <div class="form-group mx-sm-3 mb-3">
+                    <button type="submit" class="btn btn-primary">검색</button>
+                </div>
+              </form>
+        </div> 
+
         <div class="text-center">
             <ul class="pagination justify-content-center">
+                {{ if eq .pages.First 0 }}
+                <li class="page-item disabled"><a class="page-link"  href="/post/list/{{ .pages.First }}">처음</a></li>
+                {{ else }}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{ .pages.First }}">처음</a></li>
+                {{ end }}
+
                 {{ if eq .pages.Prev 0 }}
                 <li class="page-item disabled"><a class="page-link"  href="/post/list/{{ .pages.Prev }}">이전</a></li>
                 {{ else }}
@@ -92,6 +110,12 @@
                 <li class="page-item disabled"><a class="page-link"  href="/post/list/{{ .pages.Next }}">다음</a></li>
                 {{ else }}
                 <li class="page-item"><a class="page-link"  href="/post/list/{{ .pages.Next }}">다음</a></li>
+                {{ end }}
+
+                {{ if eq .pages.Last 0 }}
+                <li class="page-item disabled"><a class="page-link"  href="/post/list/{{ .pages.Last }}">끝</a></li>
+                {{ else }}
+                <li class="page-item"><a class="page-link"  href="/post/list/{{ .pages.Last }}">끝</a></li>
                 {{ end }}
             </ul>
         </div>

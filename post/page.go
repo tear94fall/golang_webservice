@@ -4,6 +4,8 @@ import "math"
 
 type PageInfo struct {
 	Total    int64
+	First    int
+	Last     int
 	Prev     int
 	Next     int
 	Current  int
@@ -14,8 +16,8 @@ type PageInfo struct {
 }
 
 const (
-	column_max int = 10
-	search_max int = 10
+	col_max int = 10
+	row_max int = 10
 )
 
 func NewPageInfo() *PageInfo {
@@ -30,34 +32,39 @@ func SetPageInfo(pageInfo *PageInfo) error {
 	}
 
 	pageInfo.Start = pageInfo.Current
-	pageInfo.End = (int)(math.Ceil((float64(pageInfo.Total) / float64(search_max))))
-	pageInfo.Prev = pageInfo.Current - 1
-	pageInfo.Next = pageInfo.Current + 1
+	pageInfo.End = (int)(math.Ceil((float64(pageInfo.Total) / float64(row_max))))
+	pageInfo.First = 1
+	pageInfo.Last = pageInfo.End
+	pageInfo.Prev = pageInfo.Current - 10
+	pageInfo.Next = pageInfo.Current + 10
 
-	pageMax := func(current int, end int) int {
-		if end-current > search_max {
-			return current + search_max
-		}
-		return end
-	}(pageInfo.Current, pageInfo.End)
+	if pageInfo.Current-row_max < 1 {
+		pageInfo.Prev = 1
+	} else if pageInfo.Current+row_max > pageInfo.End {
+		pageInfo.Next = pageInfo.End
+	}
 
-	pageMin := func(current int, end int) int {
-		if end-current < search_max {
-			return end - search_max
-		}
-		return pageInfo.Start
-	}(pageInfo.Current, pageInfo.End)
+	if pageInfo.Current == 1 {
+		pageInfo.First = 0
+		pageInfo.Prev = 0
+	} else if pageInfo.Current == pageInfo.End {
+		pageInfo.Last = 0
+		pageInfo.Next = 0
+	}
 
-	for i := pageMin; i < pageInfo.Current; i++ {
+	startIndex := pageInfo.Current - (pageInfo.Current % 10) + 1
+	endIndex := startIndex + 10
+
+	if endIndex > pageInfo.End {
+		endIndex = pageInfo.End + 1
+	}
+
+	for i := startIndex; i < pageInfo.Current; i++ {
 		pageInfo.LIndexes = append(pageInfo.LIndexes, i)
 	}
 
-	for i := pageInfo.Current + 1; i < pageMax; i++ {
+	for i := pageInfo.Current + 1; i < endIndex; i++ {
 		pageInfo.RIndexes = append(pageInfo.RIndexes, i)
-	}
-
-	if pageInfo.Current == pageInfo.End {
-		pageInfo.Next = 0
 	}
 
 	return nil
